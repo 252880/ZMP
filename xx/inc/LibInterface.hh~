@@ -1,0 +1,34 @@
+#ifndef LIBINTERFACE_HH
+#define LIBINTERFACE_HH
+
+
+
+#include <iostream>
+#include <dlfcn.h>
+#include <cassert>
+#include <cstdio>
+#include <sstream>
+#include "MobileObj.hh"
+#include "Interp4Command.hh"
+
+class LibInterface {
+
+  void* LibHandler;
+  
+
+public:
+
+  LibInterface(std::string path);
+ ~LibInterface();
+
+  
+  
+  Interp4Command *(*pCreateCmd)(void);
+
+  
+  std::string CmdName;
+
+};
+
+
+#endif
