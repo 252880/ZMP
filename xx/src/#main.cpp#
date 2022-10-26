@@ -7,9 +7,7 @@
 #include "Interp4Command.hh"
 #include "MobileObj.hh"
 
-#define mv "libInterp4Move.so"
-#define rt "libInterp4Rotate.so"
-#define st "libInterp4Set.so"
+#define name "libInterp4Move.so"
 
 
 #define LINE_SIZE 500
@@ -32,8 +30,7 @@ bool ExecPreprocesor( const char * NazwaPliku, istringstream &IStrm4Cmds )
 
 int main()
 {
-  LibInterface set(st);
-  LibInterface move(mv);
-  LibInterface rotate(rt);
+  LibInterface move(name);
+
   return 0;
 }

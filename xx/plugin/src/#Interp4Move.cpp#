@@ -40,7 +40,7 @@ void Interp4Move::PrintCmd() const
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout <<"   "<< GetCmdName() << "  " <<_Name<<"             "<< _Speed_mmS  << "              " << _Length<< endl;
+  cout << GetCmdName() << " " <<_Name<<" "<< _Speed_mmS  << " " << _Length<< endl;
 }
 
 
@@ -91,5 +91,5 @@ Interp4Command* Interp4Move::CreateCmd()
  */
 void Interp4Move::PrintSyntax() const
 {
-  cout << "   Move  NazwaObiektu  Szybkosc[m/s]  DlugoscDrogi[m]" << endl;
+  cout << GetCmdName() <<"  NazwaObiektu  Szybkosc[m/s]  DlugoscDrogi[m]" << endl;
 }

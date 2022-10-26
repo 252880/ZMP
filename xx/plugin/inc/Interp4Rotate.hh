@@ -1,5 +1,5 @@
-#ifndef  COMMAND4MOVE_HH
-#define  COMMAND4MOVE_HH
+#ifndef  COMMAND4ROTATE_HH
+#define  COMMAND4ROTATE_HH
 
 #ifndef __GNUG__
 # pragma interface
@@ -18,9 +18,9 @@
 /*!
  * \brief Modeluje polecenie dla robota mobilnego, które wymusza jego ruch do przodu
  *
- *  Klasa modeluje ...
+ *  Klasa modeluje ... 
  */
-class Interp4Move: public Interp4Command {
+class Interp4Rotate: public Interp4Command {
   /*
    *  Tu należy zdefiniować pola, które są niezbędne
    *  do przechowywania wartości parametrów danego polecenia.
@@ -29,13 +29,13 @@ class Interp4Move: public Interp4Command {
 
   double  _Speed_mmS;
   std::string  _Name;
-  double  _Length;
-
+  double  _Angle;
+  
 public:
   /*!
    * \brief
    */
-  Interp4Move();  
+  Interp4Rotate();  
   /*!
    * \brief Wyświetla postać bieżącego polecenia (nazwę oraz wartości parametrów)
    */
