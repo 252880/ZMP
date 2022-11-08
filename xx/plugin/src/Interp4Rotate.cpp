@@ -28,7 +28,7 @@ Interp4Command* CreateCmd(void)
 /*!
  *
  */
-Interp4Rotate::Interp4Rotate():_Name("XY"), _Speed_mmS(2), _Angle(30)
+Interp4Rotate::Interp4Rotate():_Name(""), _Speed_mmS(0), _Angle(0)
 {}
 
 
@@ -70,10 +70,26 @@ bool Interp4Rotate::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
  */
 bool Interp4Rotate::ReadParams(std::istream& Strm_CmdsList)
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
-  return true;
+  if (!(Strm_CmdsList >> _Name))
+    {
+      std::cout << "Blad wczytywania nazwy" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _Speed_mmS))
+    {
+      std::cout << "Blad wczytywania predkosci obrotowej" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _Angle))
+    {
+      std::cout << "Blad wczytywania kata " << std::endl;
+      return 1;
+    }
+
+ 
+  return 0;
 }
 
 

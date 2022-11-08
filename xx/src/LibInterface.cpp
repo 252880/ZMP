@@ -4,11 +4,11 @@
 #include "geomVector.hh"
 #include "MobileObj.hh"
 #include "Interp4Command.hh"
-
+0;10;1c
 
 using namespace std;
 
-LibInterface::LibInterface(std::string path)
+bool LibInterface::init(std::string path)
 {
   LibHandler = dlopen(path.c_str(),RTLD_LAZY);
 
@@ -18,28 +18,43 @@ LibInterface::LibInterface(std::string path)
     
   }
 
+  const char* (*GetCmdName)(void);  
   void* pFun;
+
+  
   pFun = dlsym(LibHandler,"CreateCmd");
   if (!pFun) {
     cerr << "!!! Nie znaleziono funkcji CreateCmd" << endl;
    
   }
+
   pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&pFun);
 
-  Interp4Command *pCmd = pCreateCmd();
+  pFun = dlsym(LibHandler,"GetCmdName");
+  if(!pFun){
+    cerr << "!!! Nie znaleziono funkcji GetCmdName" << endl;
+  
+  }
+  
 
-  cout << endl;
-  cout << pCmd->GetCmdName() << endl;
-  cout << endl;
-  pCmd->PrintSyntax();
-  cout << endl;
-  pCmd->PrintCmd();
-  cout << endl;
+  GetCmdName = reinterpret_cast<const char* (*)(void)>(pFun);
 
-  delete pCmd;
+  CmdName = GetCmdName();
+  
+  
 }
 
 
+Interp4Command *LibInterface::CreateCmd()
+{
+  return pCreateCmd();
+}
+
+string LibInterface ::GetCmdName(){
+
+  return CmdName;
+}
+  
 LibInterface::~LibInterface()
 {
   dlclose(LibHandler);

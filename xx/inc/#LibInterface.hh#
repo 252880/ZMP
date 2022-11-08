@@ -1,5 +1,7 @@
 #ifndef LIBINTERFACE_HH
 #define LIBINTERFACE_HH
+
+
 #include <string>
 #include "Vector3D.hh"
 #include "geomVector.hh"
@@ -10,19 +12,21 @@
 class LibInterface {
 
   void* LibHandler;
-  Interp4Command *(*pCreateCmd)(void);
-  std::string CmdName;
   
+
+
   
 public:
 
-  
+  LibInterface(std::string path);
  ~LibInterface();
 
-  Interp4Command* CreateCmd();
-  std::string GetCmdName();
-  bool init(std::string path);
   
+  bool init(std::string f_Name);
+
+  
+  const char* GetCmdName();
+  Interp4Command* CreateCmd();
 
 };
 

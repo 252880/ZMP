@@ -28,7 +28,7 @@ Interp4Command* CreateCmd(void)
 /*!
  *
  */
-Interp4Move::Interp4Move():_Name("X"), _Speed_mmS(1), _Length(10)
+Interp4Move::Interp4Move():_Name(""), _Speed_mmS(0), _Length(0)
 {}
 
 
@@ -70,10 +70,25 @@ bool Interp4Move::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
  */
 bool Interp4Move::ReadParams(std::istream& Strm_CmdsList)
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
-  return true;
+
+  if (!(Strm_CmdsList >> _Name))
+    {
+      std::cout << "Blad wczytywania nazwy" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _Speed_mmS))
+    {
+      std::cout << "Blad wczytywania predkosci" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _Length))
+    {
+      std::cout << "Blad wczytywania odleglosci" << std::endl;
+      return 1;
+    }
+  return 0;
 }
 
 

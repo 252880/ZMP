@@ -28,7 +28,7 @@ Interp4Command* CreateCmd(void)
 /*!
  *
  */
-Interp4Set::Interp4Set(): _Name("ob_A"), _X(2),_Y(0),_Z(30)
+Interp4Set::Interp4Set(): _Name(""), _X(0),_Y(0),_Z(0)
 {}
 
 
@@ -70,10 +70,31 @@ bool Interp4Set::ExecCmd( MobileObj  *pMobObj,  int  Socket) const
  */
 bool Interp4Set::ReadParams(std::istream& Strm_CmdsList)
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
-  return true;
+  if (!(Strm_CmdsList >> _Name))
+    {
+      std::cout << "Blad wczytywania nazwy" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _X))
+    {
+      std::cout << "Blad wczytywania pozycji x" << std::endl;
+      return 1;
+    }
+
+  if (!(Strm_CmdsList >> _Y))
+    {
+      std::cout << "Blad wczytywania pozycji y" << std::endl;
+      return 1;
+    }
+  
+  if (!(Strm_CmdsList >> _Z))
+    {
+      std::cout << "Blad wczytywania pozycji z" << std::endl;
+          return 1;
+    }
+  
+  return 0;
 }
 
 
