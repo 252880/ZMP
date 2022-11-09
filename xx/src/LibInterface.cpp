@@ -18,7 +18,7 @@ bool LibInterface::init(string path)
     
   }
 
-  //  const char* (*GetCmdName)(void);  
+  const char* (*GetCmdName)(void);  
   void* pFun;
 
   
@@ -37,8 +37,8 @@ bool LibInterface::init(string path)
   }
   
 
-  // GetCmdName = reinterpret_cast<const char* (*)(void)>(pFun);
-  // pCmdName = GetCmdName();
+  GetCmdName = reinterpret_cast<const char* (*)(void)>(pFun);
+  pCmdName = GetCmdName();
   
   
 }
@@ -49,7 +49,7 @@ Interp4Command *LibInterface::CreateCmd()
   return pCreateCmd();
 }
 
-string LibInterface ::GetCmdName(){
+string LibInterface ::_GetCmdName(){
 
   return pCmdName;
 }

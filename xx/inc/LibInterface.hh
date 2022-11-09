@@ -20,7 +20,7 @@ public:
   ~LibInterface();
 
   Interp4Command* CreateCmd();
-  std::string GetCmdName();
+  std::string _GetCmdName();
   bool init(std::string path);
   
 
