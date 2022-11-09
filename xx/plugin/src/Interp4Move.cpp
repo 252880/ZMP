@@ -40,7 +40,7 @@ void Interp4Move::PrintCmd() const
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout <<"   "<< GetCmdName() << "  " <<_Name<<"             "<< _Speed_mmS  << "              " << _Length<< endl;
+  cout <<"   "<< GetCmdName() << "  " <<_Name<<" "<< _Speed_mmS  << " " << _Length<< endl;
 }
 
 

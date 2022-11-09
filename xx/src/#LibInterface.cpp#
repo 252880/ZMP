@@ -8,7 +8,7 @@
 
 using namespace std;
 
-bool LibInterface::init(string path)
+bool LibInterface::init(std::string path)
 {
   LibHandler = dlopen(path.c_str(),RTLD_LAZY);
 
@@ -38,7 +38,7 @@ bool LibInterface::init(string path)
   
 
   // GetCmdName = reinterpret_cast<const char* (*)(void)>(pFun);
-  // pCmdName = GetCmdName();
+  pCmdName = GetCmdName();
   
   
 }
@@ -49,10 +49,7 @@ Interp4Command *LibInterface::CreateCmd()
   return pCreateCmd();
 }
 
-string LibInterface ::GetCmdName(){
 
-  return pCmdName;
-}
   
 LibInterface::~LibInterface()
 {

@@ -11,13 +11,13 @@ class LibInterface {
 
   void* LibHandler;
   Interp4Command *(*pCreateCmd)(void);
-  std::string CmdName;
+  std::string pCmdName;
   
   
 public:
 
   
- ~LibInterface();
+  ~LibInterface();
 
   Interp4Command* CreateCmd();
   std::string GetCmdName();

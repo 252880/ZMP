@@ -40,7 +40,7 @@ void Interp4Rotate::PrintCmd() const
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout <<"   "<< GetCmdName() << "  " <<_Name<<"            "<< _Speed_mmS  << "              " <<_Angle<< endl;
+  cout <<"   "<< GetCmdName() << "  " <<_Name<<" "<< _Speed_mmS  << " " <<_Angle<< endl;
 }
 
 
