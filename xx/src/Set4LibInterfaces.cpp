@@ -2,21 +2,18 @@
 
 using namespace std;
 
-bool Set4LibInterfaces::init()
+
+bool Set4LibInterfaces::init(std::vector<std::string> libraries_vector)
 {
-  rt->init("libs/libInterp4Rotate.so");
-  ps->init("libs/libInterp4Pause.so");
-  st->init("libs/libInterp4Set.so");
-  mv->init("libs/libInterp4Move.so");
+    for (int i = 0; i < libraries_vector.size(); i++)
+    {
+        std::shared_ptr<LibInterface> tmp_library = std::make_shared<LibInterface>();
+        tmp_library->init("libs/" + libraries_vector[i]);
+        std::string command_name = libraries_vector[i].substr(10, libraries_vector[i].length() - 13);
+        std::cout << command_name << std::endl;
 
-  Lib.insert(make_pair("Rotate", rt));
-  Lib.insert(make_pair("Pause", ps));
-  Lib.insert(make_pair("Set", st));
-  Lib.insert(make_pair("Move", mv));
-
-  return 0;
-  }
-
+        libraries.insert(std::make_pair(command_name, tmp_library));
+    }
 
 bool Set4LibInterfaces::execPreprocesor( const char * NazwaPliku, istringstream &IStrm4Cmds)
 {
@@ -33,7 +30,77 @@ bool Set4LibInterfaces::execPreprocesor( const char * NazwaPliku, istringstream 
   return pclose(pProc) == 0;
 }
 
+bool Set4LibInterfaces::ReadFile(const char* sFileName, Configuration &rConfig)
+{
+   try {
+            xercesc::XMLPlatformUtils::Initialize();
+   }
+   catch (const xercesc::XMLException& toCatch) {
+            char* message = xercesc::XMLString::transcode(toCatch.getMessage());
+            std::cerr << "Error during initialization! :\n";
+            std::cerr << "Exception message is: \n"
+                 << message << "\n";
+            xercesc::XMLString::release(&message);
+            return 1;
+   }
 
+   xercesc::SAX2XMLReader* pParser = xercesc::XMLReaderFactory::createXMLReader();
+
+   pParser->setFeature(xercesc::XMLUni::fgSAX2CoreNameSpaces, true);
+   pParser->setFeature(xercesc::XMLUni::fgSAX2CoreValidation, true);
+   pParser->setFeature(xercesc::XMLUni::fgXercesDynamic, false);
+   pParser->setFeature(xercesc::XMLUni::fgXercesSchema, true);
+   pParser->setFeature(xercesc::XMLUni::fgXercesSchemaFullChecking, true);
+
+   pParser->setFeature(xercesc::XMLUni::fgXercesValidationErrorAsFatal, true);
+
+   xercesc::DefaultHandler* pHandler = new XMLInterp4Config(rConfig);
+   pParser->setContentHandler(pHandler);
+   pParser->setErrorHandler(pHandler);
+
+   try {
+     
+     if (!pParser->loadGrammar("config/config.xsd",
+                              xercesc::Grammar::SchemaGrammarType,true)) {
+       std::cerr << "!!! Plik grammar/actions.xsd, '" << std::endl
+            << "!!! ktory zawiera opis gramatyki, nie moze zostac wczytany."
+            << std::endl;
+       return false;
+     }
+     pParser->setFeature(xercesc::XMLUni::fgXercesUseCachedGrammarInParse,true);
+     pParser->parse(sFileName);
+   }
+   catch (const xercesc::XMLException& Exception) {
+            char* sMessage = xercesc::XMLString::transcode(Exception.getMessage());
+            std::cerr << "Informacja o wyjatku: \n"
+                 << "   " << sMessage << "\n";
+            xercesc::XMLString::release(&sMessage);
+            return false;
+   }
+   catch (const xercesc::SAXParseException& Exception) {
+            char* sMessage = xercesc::XMLString::transcode(Exception.getMessage());
+            char* sSystemId = xercesc::XMLString::transcode(Exception.getSystemId());
+
+            std::cerr << "Blad! " << std::endl
+                 << "    Plik:  " << sSystemId << std::endl
+                 << "   Linia: " << Exception.getLineNumber() << std::endl
+                 << " Kolumna: " << Exception.getColumnNumber() << std::endl
+                 << " Informacja: " << sMessage 
+                 << std::endl;
+
+            xercesc::XMLString::release(&sMessage);
+            xercesc::XMLString::release(&sSystemId);
+            return false;
+   }
+   catch (...) {
+            std::cout << "Zgloszony zostal nieoczekiwany wyjatek!\n" ;
+            return false;
+   }
+
+   delete pParser;
+   delete pHandler;
+   return true;
+}
 
 bool Set4LibInterfaces::execute(istringstream &stream)
 {

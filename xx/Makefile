@@ -1,4 +1,4 @@
-__start__: obj __lines_for_space__ obj/LibInterface.o  obj/Set4LibInterfaces.o interp __plugin__
+__start__: obj __lines_for_space__ obj/Scene.o obj/Sender.o obj/LibInterface.o obj/xmlinterp.o obj/Set4LibInterfaces.o interp __plugin__
 	export LD_LIBRARY_PATH="./libs"; ./interp
 
 obj:
@@ -23,17 +23,26 @@ LDFLAGS=-Wall
 
 
 interp: obj/main.o
-	g++ ${LDFLAGS} -o interp  obj/main.o obj/LibInterface.o obj/Set4LibInterfaces.o -ldl
+	g++ ${LDFLAGS} -o interp  obj/main.o obj/Scene.o obj/Sender.o obj/LibInterface.o obj/Set4LibInterfaces.o obj/xmlinterp.o -ldl -lxerces-c
 
 obj/main.o: src/main.cpp inc/Interp4Command.hh
 	g++ -c ${CPPFLAGS} -o obj/main.o src/main.cpp
 
-obj/Set4LibInterfaces.o: src/Set4LibInterfaces.cpp inc/Set4LibInterfaces.hh inc/Interp4Command.hh inc/LibInterface.hh
+obj/Set4LibInterfaces.o: src/Set4LibInterfaces.cpp inc/xmlinterp.hh inc/Configuration.hh inc/Set4LibInterfaces.hh inc/Interp4Command.hh inc/LibInterface.hh
 	g++ -c ${CPPFLAGS} -o obj/Set4LibInterfaces.o src/Set4LibInterfaces.cpp
 
 
+obj/xmlinterp.o: src/xmlinterp.cpp inc/xmlinterp.hh inc/Configuration.hh
+	g++ -c ${CPPFLAGS} -o obj/xmlinterp.o src/xmlinterp.cpp
+
 obj/LibInterface.o: src/LibInterface.cpp inc/LibInterface.hh inc/Interp4Command.hh
 	g++ -c ${CPPFLAGS} -o obj/LibInterface.o src/LibInterface.cpp
+
+obj/Sender.o: src/Sender.cpp inc/Sender.hh inc/Scene.hh inc/Port.hh
+	g++ -c ${CPPFLAGS} -o obj/Sender.o src/Sender.cpp
+
+obj/Scene.o: src/Scene.cpp inc/Scene.hh inc/MobileObj.hh inc/AccessControl.hh inc/Configuration.hh
+	g++ -c ${CPPFLAGS} -o obj/Scene.o src/Scene.cpp
 
 clean:
 	rm -f obj/* interp core*
@@ -51,7 +60,7 @@ cleanall: clean
 help:
 	@echo
 	@echo "  Lista podcelow dla polecenia make"
-	@echo
+	@echo 
 	@echo "        - (wywolanie bez specyfikacji celu) wymusza"
 	@echo "          kompilacje i uruchomienie programu."
 	@echo "  clean    - usuwa produkty kompilacji oraz program"
