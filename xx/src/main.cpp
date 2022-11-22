@@ -5,6 +5,7 @@
 #include "Interp4Command.hh"
 #include "MobileObj.hh"
 #include "LibInterface.hh"
+#include "Reader.hh"
 #include "Set4LibInterfaces.hh"
 #include "Scene.hh"
 #include "Sender.hh"
@@ -12,10 +13,10 @@
 int main()
 {
   Configuration Config;
-  Set4LibInterfaces reader;
+  Reader reader;
   Set4LibInterfaces handler;
   std::istringstream stream;
-  reader.init("wywolanie.cmd");
+  reader.init("opis_dzialan.cmd");
   reader.execPreprocesor(stream);
 
   if (!reader.ReadFile("config/config.xml", Config))
