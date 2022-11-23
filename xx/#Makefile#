@@ -17,8 +17,7 @@ __plugin__:
 	cd plugin; make
 
 CPPFLAGS=-Wall -pedantic -std=c++17 -Iinc
-LDFLAGS=-Wall -pthread
-
+LDFLAGS=-Wall
 
 
 

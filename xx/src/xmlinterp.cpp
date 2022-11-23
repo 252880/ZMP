@@ -124,43 +124,18 @@ void XMLInterp4Config::ProcessCubeAttrs(const xercesc::Attributes &rAttrs)
     }
   }
 
-  // char *sName_Name = xercesc::XMLString::transcode(rAttrs.getQName(0));
-  // char *sName_Scale = xercesc::XMLString::transcode(rAttrs.getQName(1));
-  // char *sName_RGB = xercesc::XMLString::transcode(rAttrs.getQName(2));
 
-  // XMLSize_t Index = 0;
-  // char *sValue_Name = xercesc::XMLString::transcode(rAttrs.getValue(Index));
-  // char *sValue_Scale = xercesc::XMLString::transcode(rAttrs.getValue(1));
-  // char *sValue_RGB = xercesc::XMLString::transcode(rAttrs.getValue(2));
-
-  //-----------------------------------------------------------------------------
   // Wyświetlenie nazw atrybutów i ich "wartości"
   //
   cout << " Atrybuty:" << endl;
-  //  << "     " << sName_Name << " = \"" << sValue_Name << "\"" << endl
-  //  << "     " << sName_Scale << " = \"" << sValue_Scale << "\"" << endl
-  //  << "     " << sName_RGB << " = \"" << sValue_RGB << "\"" << endl
-  //  << endl;
+
 
   for (int i = 0; i < 6; i++)
   {
     cout << "     " << sValue[i][0] << " = \"" << sValue[i][1] << "\"" << endl;
   }
 
-  //-----------------------------------------------------------------------------
-  // Przykład czytania wartości parametrów
-  // Ten przykład jest zrobiony "na piechotę" wykorzystując osobne zmienne.
-  // Skala powinna być wektorem. Czytanie powinno być rezlizowane z wykorzysaniem
-  // wektorów, np.
-  //
-  //
-  // istringstream IStrm;
-  // IStrm.str(sValue_Scale);
-  // Vector3D  Scale;
-  //
-  // IStrm >> Scale;
-  //
-  // this->config.addName(sValue_Name);
+
   istringstream IStrm;
   Vector3D tmp;
 
@@ -207,41 +182,7 @@ void XMLInterp4Config::ProcessCubeAttrs(const xercesc::Attributes &rAttrs)
     IStrm.clear();
   }
 
-  // IStrm >> Sx >> Sy >> Sz;
-  // IStrm >> tmp[0] >> tmp[1] >> tmp[2];
-  // if (IStrm.fail())
-  // {
-  //   cerr << " Blad!!!" << endl;
-  // }
-  // else
-  // {
-  //   cout << " Czytanie wartosci OK!!!" << endl;
-  //   // cout << "     " << Sx << "  " << Sy << "  " << Sz << endl;
-  //   this->config.addScale(tmp);
-  // }
 
-  // IStrm.clear();
-  // IStrm.str(sValue_RGB);
-  // IStrm >> tmp[0] >> tmp[1] >> tmp[2];
-  // if (IStrm.fail())
-  // {
-  //   cerr << " Blad!!!" << endl;
-  // }
-  // else
-  // {
-  //   cout << " Czytanie wartosci OK!!!" << endl;
-  //   this->config.addRgb(tmp);
-  // }
-
-  // Tu trzeba wstawić odpowiednio własny kod ...
-
-  // xercesc::XMLString::release(&sName_Name);
-  // xercesc::XMLString::release(&sName_Scale);
-  // xercesc::XMLString::release(&sName_RGB);
-  // xercesc::XMLString::release(&sValue_Name);
-  // xercesc::XMLString::release(&sValue_Scale);
-  // xercesc::XMLString::release(&sValue_RGB);
-  // xercesc::XMLString::release(&sValue);
 }
 
 /*!

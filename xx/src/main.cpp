@@ -16,7 +16,7 @@ int main()
   Reader reader;
   Set4LibInterfaces handler;
   std::istringstream stream;
-  reader.init("opis_dzialan.cmd");
+  reader.init("wywolanie.cmd");
   reader.execPreprocesor(stream);
 
   if (!reader.ReadFile("config/config.xml", Config))

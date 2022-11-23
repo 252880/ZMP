@@ -38,10 +38,7 @@ void Sender::Watching_and_Sending()
         for (auto const &iterator : _pScn->getMobileObjects())
         {
             std::cout << iterator.first << std::endl;
-            // Ta instrukcja to tylko uproszczony przykład
-            // std::cout << rObj.GetStateDesc();
-            // Send(rObj.GetStateDesc()); // Tu musi zostać wywołanie odpowiedniej
-            // metody/funkcji gerującej polecenia dla serwera.
+     
         }
 
         _pScn->CancelChange();
