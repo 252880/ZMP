@@ -56,11 +56,11 @@ const char* Interp4Pause::GetCmdName() const
 /*!
  *
  */
-bool Interp4Pause::ExecCmd( MobileObj  *pMobObj,  AccessControl *pAccCtrl) const
+bool Interp4Pause::ExecCmd( std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  pAccCtrl->LockAccess(); 
+    usleep(time_ms*1000);
+    pAccCtrl->UnlockAccess();
   return true;
 }
 

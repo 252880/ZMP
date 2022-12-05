@@ -56,11 +56,23 @@ const char* Interp4Rotate::GetCmdName() const
 /*!
  *
  */
-bool Interp4Rotate::ExecCmd( MobileObj  *pMobObj,  AccessControl *pAccCtrl) const
+bool Interp4Rotate::ExecCmd( std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+    double yaw = obj->GetAng_Yaw_deg();
+    double delta_= 0;
+    double dist_step_deg = (double)_Angle/X;
+    double time_ = (((double)this->_Angle/this->_Speed_mmS)*1000000)/X;
+
+    for(int i = 0; i<X; ++i)
+    {
+        pAccCtrl->LockAccess(); // Lock access to the scene to modify something :)
+        delta_+= dist_step_deg;
+        obj->SetAng_Yaw_deg(delta_ + yaw);
+        pAccCtrl->MarkChange();
+        pAccCtrl->UnlockAccess();
+        usleep(time_);
+    }
+
   return true;
 }
 

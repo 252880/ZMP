@@ -56,11 +56,18 @@ const char* Interp4Set::GetCmdName() const
 /*!
  *
  */
-bool Interp4Set::ExecCmd( MobileObj  *pMobObj,  AccessControl *pAccCtrl) const
+bool Interp4Set::ExecCmd( std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  Vector3D pos = obj->GetPosition_m();
+    pAccCtrl->LockAccess(); 
+    
+  
+    obj->SetPosition_m(Vector3D(_X, XY, startPos.z()));
+    obj->SetAng_Yaw_deg(_Z);
+    
+    pAccCtrl->MarkChange();
+    pAccCtrl->UnlockAccess();
+    
   return true;
 }
 

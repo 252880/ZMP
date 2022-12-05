@@ -1,6 +1,8 @@
 #ifndef  COMMAND4ROTATE_HH
 #define  COMMAND4ROTATE_HH
 
+#define X 100
+
 #ifndef __GNUG__
 # pragma interface
 # pragma implementation
@@ -51,7 +53,7 @@ public:
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, AccessControl *pAccCtrl) const;
+  virtual bool ExecCmd( std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */

@@ -56,11 +56,38 @@ const char* Interp4Move::GetCmdName() const
 /*!
  *
  */
-bool Interp4Move::ExecCmd( MobileObj  *pMobObj,  AccessControl *pAccCtrl) const
+bool Interp4Move::ExecCmd(std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const
 {
-  /*
-   *  Tu trzeba napisać odpowiedni kod.
-   */
+  
+
+  Vector3D position_init = obj->GetPositoin_m();
+  double roll = obj->GetAng_Roll_deg();
+  double pitch = obj->GetAng_Pitch_deg();
+  double yaw = obj->GetAng_Yaw_deg();
+
+
+  double x_ = y_ = z_ = 0;
+  
+   double dist_= (double)_Length/X;
+    double time_ = (((double)this->_Length/this->_Speed_mmS)*1000000)/X;
+         
+
+ 
+  for (int i = 0; i < X; ++i)
+  {
+  
+   pAccCtrl->LockAccess(); 
+   
+    x_ += dist_step_m*cos(pitch*M_PI/180)*cos(yaw*M_PI/180);
+        y_+= dist_step_m*(cos(startRoll*M_PI/180)*sin(yaw*M_PI/180) + cos(yaw*M_PI/180)*sin(startPitch*M_PI/180)*sin(startRoll*M_PI/180));
+        z_+= dist_step_m*(sin(startRoll*M_PI/180)*sin(yaw*M_PI/180) - cos(roll*M_PI/180)*cos(startYaw*M_PI/180)*sin(startPitch*M_PI/180));
+        obj->SetPosition_m(Vector3D(x_+startPos.x(), y_+startPos.y(), z_+startPos.z()));
+
+        pAccCtrl->MarkChange();
+        pAccCtrl->UnlockAccess();
+        usleep(time_step_us);
+  }
+  
   return true;
 }
 

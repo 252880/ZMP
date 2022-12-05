@@ -51,7 +51,7 @@ class Interp4Set: public Interp4Command {
   /*!
    * \brief Wykonuje polecenie oraz wizualizuje jego realizację
    */
-  virtual bool ExecCmd( MobileObj  *pMobObj, AccessControl *pAccCtrl) const;
+  virtual bool ExecCmd( std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const;
   /*!
    * \brief Czyta wartości parametrów danego polecenia
    */
