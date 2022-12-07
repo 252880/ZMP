@@ -1,8 +1,10 @@
-__start__: obj __lines_for_space__ obj/Scene.o obj/Sender.o obj/LibInterface.o obj/xmlinterp.o obj/Reader.o obj/Set4LibInterfaces.o interp __plugin__
+__start__: obj libs __lines_for_space__ obj/Scene.o obj/Sender.o obj/LibInterface.o obj/xmlinterp.o obj/Reader.o obj/Set4LibInterfaces.o interp __plugin__
 	export LD_LIBRARY_PATH="./libs"; ./interp
 
 obj:
 	mkdir obj
+libs:
+	mkdir libs
 
 
 __lines_for_space__:
@@ -17,13 +19,13 @@ __plugin__:
 	cd plugin; make
 
 CPPFLAGS=-Wall -pedantic -std=c++17 -Iinc
-LDFLAGS=-Wall -pthread
+LDFLAGS=-Wall
 
 
 
 
 interp: obj/main.o
-	g++ ${LDFLAGS} -o interp  obj/main.o obj/Scene.o obj/Sender.o obj/LibInterface.o obj/Reader.o obj/Set4LibInterfaces.o obj/xmlinterp.o -ldl -lxerces-c
+	g++ ${LDFLAGS} -o interp  obj/main.o obj/Scene.o obj/Sender.o obj/LibInterface.o obj/Reader.o obj/Set4LibInterfaces.o obj/xmlinterp.o -ldl -lxerces-c -pthread
 
 obj/main.o: src/main.cpp inc/Interp4Command.hh
 	g++ -c ${CPPFLAGS} -o obj/main.o src/main.cpp

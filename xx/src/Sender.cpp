@@ -24,6 +24,15 @@ int Sender::Send(const char *sMesg)
 
 void Sender::Watching_and_Sending()
 {
+    Send("Clear\n");
+    _pScn->LockAccess();
+    for (auto &iterator : _pScn->getMobileObjects())
+    {
+       
+        Send(getAddInstruction(&(iterator.second)).c_str());
+     
+    }
+    _pScn->UnlockAccess();
     while (ShouldCountinueLooping())
     {
         if (!_pScn->IsChanged())
@@ -31,14 +40,16 @@ void Sender::Watching_and_Sending()
             usleep(10000);
             continue;
         }
+    
         _pScn->LockAccess();
 
-        //------- Przeglądanie tej kolekcji to uproszczony przykład
+      
 
-        for (auto const &iterator : _pScn->getMobileObjects())
+        for (auto &iterator : _pScn->getMobileObjects())
         {
-            std::cout << iterator.first << std::endl;
-     
+   
+            Send(getUpdateInstruction(&(iterator.second)).c_str());
+         
         }
 
         _pScn->CancelChange();
@@ -70,4 +81,38 @@ bool Sender::OpenConnection()
         return false;
     }
     return true;
+}
+
+std::string Sender::getUpdateInstruction(MobileObj *obj) const
+{
+    std::string tmp = "UpdateObj";
+    Vector3D pos = obj->GetPositoin_m();
+    Vector3D sca = obj->getScale();
+    Vector3D tra = obj->getTranslation();
+    Vector3D rgb = obj->getRgb();
+    tmp += " Name=" + obj->GetName();
+    tmp += " Shift=(" + std::to_string(pos[0]) + ", " + std::to_string(pos[1]) + ", " + std::to_string(pos[2]) + ")";
+    tmp += " Scale=(" + std::to_string(sca[0]) + ", " + std::to_string(sca[1]) + ", " + std::to_string(sca[2]) + ")";
+    tmp += " Trans_m=(" + std::to_string(tra[0]) + ", " + std::to_string(tra[1]) + ", " + std::to_string(tra[2]) + ")";
+    tmp += " RGB=(" + std::to_string((int)rgb[0]) + ", " + std::to_string((int)rgb[1]) + ", " + std::to_string((int)rgb[2]) + ")";
+    tmp += " RotXYZ_deg=(" + std::to_string(obj->GetAng_Roll_deg()) + ", " + std::to_string(obj->GetAng_Pitch_deg()) + ", " + std::to_string(obj->GetAng_Yaw_deg()) + ")\n";
+
+    return tmp;
+}
+
+std::string Sender::getAddInstruction(MobileObj *obj) const
+{
+    std::string tmp = "AddObj";
+    Vector3D pos = obj->GetPositoin_m();
+    Vector3D sca = obj->getScale();
+    Vector3D tra = obj->getTranslation();
+    Vector3D rgb = obj->getRgb();
+    tmp += " Name=" + obj->GetName();
+    tmp += " Shift=(" + std::to_string(pos[0]) + ", " + std::to_string(pos[1]) + ", " + std::to_string(pos[2]) + ")";
+    tmp += " Scale=(" + std::to_string(sca[0]) + ", " + std::to_string(sca[1]) + ", " + std::to_string(sca[2]) + ")";
+    tmp += " Trans_m=(" + std::to_string(tra[0]) + ", " + std::to_string(tra[1]) + ", " + std::to_string(tra[2]) + ")";
+    tmp += " RGB=(" + std::to_string((int)rgb[0]) + ", " + std::to_string((int)rgb[1]) + ", " + std::to_string((int)rgb[2]) + ")";
+    tmp += " RotXYZ_deg=(" + std::to_string(obj->GetAng_Roll_deg()) + ", " + std::to_string(obj->GetAng_Pitch_deg()) + ", " + std::to_string(obj->GetAng_Yaw_deg()) + ")\n";
+    std::cout << tmp;
+    return tmp;
 }

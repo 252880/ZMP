@@ -1,62 +1,47 @@
 #include "LibInterface.hh"
-#include <string>
-#include "Vector3D.hh"
-#include "geomVector.hh"
-#include "MobileObj.hh"
-#include "Interp4Command.hh"
 
-
-using namespace std;
-
-bool LibInterface::init(string path)
+LibInterface::~LibInterface()
 {
-  LibHandler = dlopen(path.c_str(),RTLD_LAZY);
-
-
-  if (!LibHandler) {
-    cerr << "!!! Brak biblioteki: " << path << endl;
-    
-  }
-
-  const char* (*GetCmdName)(void);  
-  void* pFun;
-
-  
-  pFun = dlsym(LibHandler,"CreateCmd");
-  if (!pFun) {
-    cerr << "!!! Nie znaleziono funkcji CreateCmd" << endl;
-   
-  }
-
-  pCreateCmd = *reinterpret_cast<Interp4Command* (**)(void)>(&pFun);
-
-  pFun = dlsym(LibHandler,"GetCmdName");
-  if(!pFun){
-    cerr << "!!! Nie znaleziono funkcji GetCmdName" << endl;
-  
-  }
-  
-
-  GetCmdName = reinterpret_cast<const char* (*)(void)>(pFun);
-  pCmdName = GetCmdName();
-  
-  
+    dlclose(_LibHandler);
 }
 
+bool LibInterface::init(std::string libraryName)
+{
+
+    _LibHandler = dlopen(libraryName.c_str(), RTLD_LAZY);
+    void *function;
+    const char *(*getCmdName)(void);
+
+    if (!_LibHandler)
+    {
+        std::cerr << "!!! Brak biblioteki: " << libraryName << std::endl;
+        return 1;
+    }
+
+    function = dlsym(_LibHandler, "CreateCmd");
+
+    if (!function)
+    {
+        std::cerr << "!!! Nie znaleziono funkcji CreateCmd w " << libraryName << std::endl;
+        return 1;
+    }
+
+    this->_pCreateCmd = *reinterpret_cast<Interp4Command *(**)(void)>(&function);
+
+    function = dlsym(_LibHandler, "GetCmdName");
+
+    if (!function)
+    {
+        std::cerr << "!!! Nie znaleziono funkcji GetCmdName w " << libraryName << std::endl;
+        return 1;
+    }
+
+    getCmdName = reinterpret_cast<const char *(*)(void)>(function);
+    _CmdName = getCmdName();
+    return 0;
+}
 
 Interp4Command *LibInterface::CreateCmd()
 {
-  return pCreateCmd();
+    return _pCreateCmd();
 }
-
-string LibInterface ::_GetCmdName(){
-
-  return pCmdName;
-}
-  
-LibInterface::~LibInterface()
-{
-  dlclose(LibHandler);
-}
-
-

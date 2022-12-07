@@ -1,30 +1,19 @@
-#ifndef LIBINTERFACE_HH
-#define LIBINTERFACE_HH
+#pragma once
+
+#include <iostream>
 #include <string>
-#include "Vector3D.hh"
-#include "geomVector.hh"
-#include "MobileObj.hh"
+#include <dlfcn.h>
 #include "Interp4Command.hh"
-#include "dlfcn.h"
 
-class LibInterface {
+class LibInterface
+{
+private:
+    void *_LibHandler;
+    std::string _CmdName;
+    Interp4Command *(*_pCreateCmd)(void);
 
-  void* LibHandler;
-  Interp4Command *(*pCreateCmd)(void);
-  std::string pCmdName;
-  
-  
 public:
-
-  
-  ~LibInterface();
-
-  Interp4Command* CreateCmd();
-  std::string _GetCmdName();
-  bool init(std::string path);
-  
-
+    ~LibInterface();
+    bool init(std::string libraryName);
+    Interp4Command *CreateCmd();
 };
-
-
-#endif

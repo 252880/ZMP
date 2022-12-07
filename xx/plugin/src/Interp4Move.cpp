@@ -1,36 +1,32 @@
 #include <iostream>
 #include "Interp4Move.hh"
 #include "MobileObj.hh"
-#include "LibInterface.hh"
+
 using std::cout;
 using std::endl;
 
-
-extern "C" {
- Interp4Command* CreateCmd(void);
-  const char* GetCmdName() { return "Move"; }
+extern "C"
+{
+  Interp4Command *CreateCmd(void);
+  const char *GetCmdName() { return "Move"; }
 }
-
-
-
 
 /*!
  * \brief
  *
  *
  */
-Interp4Command* CreateCmd(void)
+Interp4Command *CreateCmd(void)
 {
   return Interp4Move::CreateCmd();
 }
 
-
 /*!
  *
  */
-Interp4Move::Interp4Move():_Name(""), _Speed_mmS(0), _Length(0)
-{}
-
+Interp4Move::Interp4Move() : _Name(""), _Speed_mmS(0), _Lenght(0)
+{
+}
 
 /*!
  *
@@ -40,93 +36,90 @@ void Interp4Move::PrintCmd() const
   /*
    *  Tu trzeba napisać odpowiednio zmodyfikować kod poniżej.
    */
-  cout <<"   "<< GetCmdName() << "  " <<_Name<<" "<< _Speed_mmS  << " " << _Length<< endl;
+  cout << GetCmdName() << " " << _Name << " " << _Speed_mmS << " " << _Lenght << endl;
 }
-
 
 /*!
  *
  */
-const char* Interp4Move::GetCmdName() const
+const char *Interp4Move::GetCmdName() const
 {
   return ::GetCmdName();
 }
 
-
 /*!
  *
  */
-bool Interp4Move::ExecCmd(std::shared_ptr<MobileObject> & obj,  std::shared_ptr<Scene> & pAccCtrl) const
+bool Interp4Move::ExecCmd(Scene *scene) const
 {
-  
-
-  Vector3D position_init = obj->GetPositoin_m();
-  double roll = obj->GetAng_Roll_deg();
-  double pitch = obj->GetAng_Pitch_deg();
+  MobileObj *obj = scene->FindMobileObj(_Name.c_str());
+  Vector3D position = obj->GetPositoin_m();
+  double roll= obj->GetAng_Roll_deg();
+  double pitch= obj->GetAng_Pitch_deg();
   double yaw = obj->GetAng_Yaw_deg();
 
+  double time = _Lenght / _Speed_mmS;
+  double steps = (int)(time * N);
 
-  double x_ = y_ = z_ = 0;
-  
-   double dist_= (double)_Length/X;
-    double time_ = (((double)this->_Length/this->_Speed_mmS)*1000000)/X;
-         
+  double x_ = 0, y_ = 0, z_ = 0;
+  Vector3D move;
+  double step_distance = _Distance_m / steps; 
+  double step = 0.0333333 * 1000000;            
 
- 
-  for (int i = 0; i < X; ++i)
+
+  for (int i = 0; i < steps; ++i)
   {
+  scene->LockAccess();
   
-   pAccCtrl->LockAccess(); 
-   
-    x_ += dist_step_m*cos(pitch*M_PI/180)*cos(yaw*M_PI/180);
-        y_+= dist_step_m*(cos(startRoll*M_PI/180)*sin(yaw*M_PI/180) + cos(yaw*M_PI/180)*sin(startPitch*M_PI/180)*sin(startRoll*M_PI/180));
-        z_+= dist_step_m*(sin(startRoll*M_PI/180)*sin(yaw*M_PI/180) - cos(roll*M_PI/180)*cos(startYaw*M_PI/180)*sin(startPitch*M_PI/180));
-        obj->SetPosition_m(Vector3D(x_+startPos.x(), y_+startPos.y(), z_+startPos.z()));
-
-        pAccCtrl->MarkChange();
-        pAccCtrl->UnlockAccess();
-        usleep(time_step_us);
+    x_ += step_distance * cos(pitch * M_PI / 180) * cos(yaw * M_PI / 180);
+    y_ += step_distance * (cos(roll * M_PI / 180) * sin(yaw * M_PI / 180) + cos(yaw * M_PI / 180) * sin(pitch * M_PI / 180) * sin(roll * M_PI / 180));
+    z_ += step_distance * (sin(roll * M_PI / 180) * sin(yaw * M_PI / 180) - cos(roll * M_PI / 180) * cos(yaw * M_PI / 180) * sin(pitch * M_PI / 180));
+    move[0] = x_+ position[0];
+    move[1] = y_ + position[1];
+    move[2] = z_ + position[2];
+    
+    object->SetPosition_m(move);
+    scene->MarkChange();
+    scene->UnlockAccess();
+    usleep(step;
   }
-  
+ 
+
   return true;
 }
 
-
 /*!
  *
  */
-bool Interp4Move::ReadParams(std::istream& Strm_CmdsList)
+bool Interp4Move::ReadParams(std::istream &Strm_CmdsList)
 {
-
   if (!(Strm_CmdsList >> _Name))
-    {
-      std::cout << "Blad wczytywania nazwy" << std::endl;
-      return 1;
-    }
+  {
+    std::cout << "Blad wczytywania nazwy obiektu" << std::endl;
+    return 1;
+  }
 
   if (!(Strm_CmdsList >> _Speed_mmS))
-    {
-      std::cout << "Blad wczytywania predkosci" << std::endl;
-      return 1;
-    }
+  {
+    std::cout << "Blad wczytywania predkosci obiektu" << std::endl;
+    return 1;
+  }
 
-  if (!(Strm_CmdsList >> _Length))
-    {
-      std::cout << "Blad wczytywania odleglosci" << std::endl;
-      return 1;
-    }
+  if (!(Strm_CmdsList >> _Lenght))
+  {
+    std::cout << "Blad wczytywania odleglosci" << std::endl;
+    return 1;
+  }
   return 0;
 }
 
-
 /*!
  *
  */
-Interp4Command* Interp4Move::CreateCmd()
+Interp4Command *Interp4Move::CreateCmd()
 {
   return new Interp4Move();
 }
-
 
 /*!
  *

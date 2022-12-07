@@ -12,9 +12,11 @@
 class Set4LibInterfaces
 {
 private:
-    std::map<std::string, std::shared_ptr<LibInterface>> libraries;
+    std::map<std::string, std::shared_ptr<LibInterface>> lib;
+    bool parallel = false;
 
 public:
-    bool init(std::vector<std::string> libraries_vector);
-    bool execute(std::istringstream &stream);
+    bool init(std::vector<std::string> lib_vector);
+    Interp4Command *execute(std::string key);
+    bool isParallel() { return parallel; }
 };

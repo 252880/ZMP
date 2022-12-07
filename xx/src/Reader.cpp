@@ -26,14 +26,7 @@ bool Reader::execPreprocesor(std::istringstream &IStrm4Cmds)
     return pclose(pProc) == 0;
 }
 
-/*!
- * Czyta z pliku opis poleceń i dodaje je do listy komend,
- * które robot musi wykonać.
- * \param sFileName - (\b we.) nazwa pliku z opisem poleceń.
- * \param CmdList - (\b we.) zarządca listy poleceń dla robota.
- * \retval true - jeśli wczytanie zostało zrealizowane poprawnie,
- * \retval false - w przeciwnym przypadku.
- */
+
 bool Reader::ReadFile(const char* sFileName, Configuration &rConfig)
 {
    try {
